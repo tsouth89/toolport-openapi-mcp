@@ -1,8 +1,12 @@
 # conduit-openapi-mcp
 
-Turn **any OpenAPI / Swagger spec into an MCP server**: one tool per endpoint, zero code.
+[![CI](https://github.com/tsouth89/conduit-openapi-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/tsouth89/conduit-openapi-mcp/actions/workflows/ci.yml) [![npm](https://img.shields.io/npm/v/conduit-openapi-mcp.svg)](https://www.npmjs.com/package/conduit-openapi-mcp) [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
+**Turn any OpenAPI / Swagger spec into an MCP server.** One tool per endpoint, zero code.
 
 Point it at a spec URL or file, give it auth, and every operation in the API becomes a tool your AI client can call. Built by the team behind [Conduit](https://conduitmcp.app).
+
+> Pointed at Stripe's OpenAPI spec, it generates **587 tools** from one URL. (Behind [Conduit](https://conduitmcp.app), your agent sees a handful of meta-tools and searches them, for ~90% fewer tokens.)
 
 ```bash
 npx conduit-openapi-mcp
@@ -27,6 +31,8 @@ It's configured entirely through environment variables, so it drops into any MCP
 ```
 
 That one URL gives the model 19 tools (`getPetById`, `findPetsByStatus`, `addPet`, ...), each with the right input schema pulled straight from the spec.
+
+> **Not on npm yet?** Until it's published, run from source: clone the repo, `npm install && npm run build`, then swap the `npx` line for `"command": "node", "args": ["/absolute/path/to/conduit-openapi-mcp/dist/index.js"]`.
 
 ### With auth
 
@@ -69,6 +75,10 @@ So this server gives you the whole API, and Conduit makes it cheap to actually u
 3. On a call, builds the HTTP request (path / query / header params, JSON body, your auth header) and returns the response.
 
 Runs on stdio, no network ports, and your auth token stays in the env you give it.
+
+## Contributing
+
+Issues and PRs are welcome. To hack on it: `npm install`, then `npm run build`.
 
 ## License
 
