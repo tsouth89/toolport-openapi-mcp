@@ -46,6 +46,27 @@ Most real APIs need a key. Pass the header name and value:
 }
 ```
 
+### Xquik API example
+
+Xquik publishes an OpenAPI 3.1 spec and uses the `x-api-key` header for API-key auth:
+
+```jsonc
+{
+  "mcpServers": {
+    "xquik": {
+      "command": "npx",
+      "args": ["-y", "conduit-openapi-mcp"],
+      "env": {
+        "OPENAPI_SPEC": "https://xquik.com/openapi.json",
+        "OPENAPI_AUTH_HEADER": "x-api-key",
+        "OPENAPI_AUTH_VALUE": "YOUR_XQUIK_API_KEY",
+        "OPENAPI_TOOL_PREFIX": "xquik_"
+      }
+    }
+  }
+}
+```
+
 ## Configuration
 
 | Env var | Required | Description |
