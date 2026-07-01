@@ -3,7 +3,7 @@
 
 import SwaggerParser from "@apidevtools/swagger-parser";
 
-const METHODS = ["get", "post", "put", "patch", "delete", "head", "options"] as const;
+const METHODS = ["get", "post", "put", "patch", "delete", "head", "options", "trace"] as const;
 
 export interface ApiTool {
   name: string;
