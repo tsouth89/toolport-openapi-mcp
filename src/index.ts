@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-// conduit-openapi-mcp: an MCP server that turns any OpenAPI/Swagger spec into one
+// toolport-openapi-mcp: an MCP server that turns any OpenAPI/Swagger spec into one
 // tool per endpoint. Configured entirely via environment variables so it drops
-// straight into any MCP client (or Conduit).
+// straight into any MCP client (or Toolport).
 
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
@@ -20,7 +20,7 @@ async function main(): Promise<void> {
   const spec = env("OPENAPI_SPEC");
   if (!spec) {
     console.error(
-      "conduit-openapi-mcp: set OPENAPI_SPEC to a URL or file path of an OpenAPI/Swagger spec.",
+      "toolport-openapi-mcp: set OPENAPI_SPEC to a URL or file path of an OpenAPI/Swagger spec.",
     );
     process.exit(1);
   }
@@ -37,11 +37,11 @@ async function main(): Promise<void> {
   const api = await loadApi(spec, config);
   // Logs go to stderr so they never corrupt the stdio JSON-RPC stream.
   console.error(
-    `conduit-openapi-mcp: loaded "${api.title}" -> ${api.tools.length} tools, base ${api.baseUrl}`,
+    `toolport-openapi-mcp: loaded "${api.title}" -> ${api.tools.length} tools, base ${api.baseUrl}`,
   );
 
   const server = new Server(
-    { name: "conduit-openapi-mcp", version: "0.1.0" },
+    { name: "toolport-openapi-mcp", version: "0.2.0" },
     { capabilities: { tools: {} } },
   );
 
@@ -79,10 +79,10 @@ async function main(): Promise<void> {
 
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error("conduit-openapi-mcp: ready on stdio.");
+  console.error("toolport-openapi-mcp: ready on stdio.");
 }
 
 main().catch((e) => {
-  console.error("conduit-openapi-mcp: fatal:", e);
+  console.error("toolport-openapi-mcp: fatal:", e);
   process.exit(1);
 });

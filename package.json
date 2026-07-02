@@ -1,10 +1,10 @@
 {
-  "name": "conduit-openapi-mcp",
-  "version": "0.1.0",
-  "description": "Turn any OpenAPI/Swagger spec into an MCP server: one tool per endpoint. A showcase for Conduit (conduitmcp.app).",
+  "name": "toolport-openapi-mcp",
+  "version": "0.2.0",
+  "description": "Turn any OpenAPI/Swagger spec into an MCP server: one tool per endpoint. A showcase for Toolport (toolport.app).",
   "type": "module",
   "bin": {
-    "conduit-openapi-mcp": "dist/index.js"
+    "toolport-openapi-mcp": "dist/index.js"
   },
   "main": "dist/index.js",
   "files": [
@@ -26,17 +26,17 @@
     "rest",
     "api",
     "ai-tools",
-    "conduit"
+    "toolport"
   ],
   "author": "South Forge AI",
   "license": "MIT",
-  "homepage": "https://conduitmcp.app",
+  "homepage": "https://toolport.app",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tsouth89/conduit-openapi-mcp.git"
+    "url": "git+https://github.com/tsouth89/toolport-openapi-mcp.git"
   },
   "bugs": {
-    "url": "https://github.com/tsouth89/conduit-openapi-mcp/issues"
+    "url": "https://github.com/tsouth89/toolport-openapi-mcp/issues"
   },
   "engines": {
     "node": ">=18"

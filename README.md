@@ -1,15 +1,15 @@
-# conduit-openapi-mcp
+# toolport-openapi-mcp
 
-[![CI](https://github.com/tsouth89/conduit-openapi-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/tsouth89/conduit-openapi-mcp/actions/workflows/ci.yml) [![npm](https://img.shields.io/npm/v/conduit-openapi-mcp.svg)](https://www.npmjs.com/package/conduit-openapi-mcp) [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![CI](https://github.com/tsouth89/toolport-openapi-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/tsouth89/toolport-openapi-mcp/actions/workflows/ci.yml) [![npm](https://img.shields.io/npm/v/toolport-openapi-mcp.svg)](https://www.npmjs.com/package/toolport-openapi-mcp) [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 **Turn any OpenAPI / Swagger spec into an MCP server.** One tool per endpoint, zero code.
 
-Point it at a spec URL or file, give it auth, and every operation in the API becomes a tool your AI client can call. Built by the team behind [Conduit](https://conduitmcp.app).
+Point it at a spec URL or file, give it auth, and every operation in the API becomes a tool your AI client can call. Built by the team behind [Toolport](https://toolport.app).
 
-> Pointed at Stripe's OpenAPI spec, it generates **587 tools** from one URL. (Behind [Conduit](https://conduitmcp.app), your agent sees a handful of meta-tools and searches them, for ~90% fewer tokens.)
+> Pointed at Stripe's OpenAPI spec, it generates **587 tools** from one URL. (Behind [Toolport](https://toolport.app), your agent sees a handful of meta-tools and searches them, for ~90% fewer tokens.)
 
 ```bash
-npx conduit-openapi-mcp
+npx toolport-openapi-mcp
 ```
 
 ## Quick start
@@ -21,7 +21,7 @@ It's configured entirely through environment variables, so it drops into any MCP
   "mcpServers": {
     "petstore": {
       "command": "npx",
-      "args": ["-y", "conduit-openapi-mcp"],
+      "args": ["-y", "toolport-openapi-mcp"],
       "env": {
         "OPENAPI_SPEC": "https://petstore3.swagger.io/api/v3/openapi.json"
       }
@@ -32,7 +32,7 @@ It's configured entirely through environment variables, so it drops into any MCP
 
 That one URL gives the model 19 tools (`getPetById`, `findPetsByStatus`, `addPet`, ...), each with the right input schema pulled straight from the spec.
 
-> **Not on npm yet?** Until it's published, run from source: clone the repo, `npm install && npm run build`, then swap the `npx` line for `"command": "node", "args": ["/absolute/path/to/conduit-openapi-mcp/dist/index.js"]`.
+> **Not on npm yet?** Until it's published, run from source: clone the repo, `npm install && npm run build`, then swap the `npx` line for `"command": "node", "args": ["/absolute/path/to/toolport-openapi-mcp/dist/index.js"]`.
 
 ### With auth
 
@@ -58,15 +58,15 @@ Most real APIs need a key. Pass the header name and value:
 | `OPENAPI_INCLUDE` | no | Regex; only operations whose tool name matches are exposed. |
 | `OPENAPI_EXCLUDE` | no | Regex; operations whose tool name matches are dropped. |
 
-## Pairs perfectly with Conduit
+## Pairs perfectly with Toolport
 
 A real API spec is often 50 to 200+ endpoints. Point this at one and your AI client gets 50 to 200+ tool definitions dumped into the model's context on every request, plus fat JSON responses that bloat it further.
 
-[Conduit](https://conduitmcp.app) fixes both halves:
+[Toolport](https://toolport.app) fixes both halves:
 - **Lazy discovery** collapses those 200 tools into 3 the agent searches on demand (~90% fewer tokens).
 - **Result-shaping** caps oversized API responses so a 10,000-row reply doesn't blow your context.
 
-So this server gives you the whole API, and Conduit makes it cheap to actually use.
+So this server gives you the whole API, and Toolport makes it cheap to actually use.
 
 ## How it works
 
