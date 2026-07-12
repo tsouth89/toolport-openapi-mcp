@@ -33,6 +33,36 @@ export interface ApiConfig {
   excludeRegex?: RegExp;
 }
 
+// After full dereference, a self-referential schema (e.g. a tree node whose
+// `children` items point back at itself) becomes a *circular* JS object. Feeding
+// that into a tool's inputSchema deadlocks the client: JSON.stringify on the
+// tools/list response throws/never completes. Deep-clone each schema instead,
+// tracking the current ancestor chain so a node that reappears above itself
+// (a genuine cycle) collapses to an empty "any" stub. A depth cap backstops any
+// pathological nesting. Only true cycles are cut; shared-but-acyclic subschemas
+// are cloned out just as JSON.stringify would emit them.
+const MAX_SCHEMA_DEPTH = 50;
+
+function sanitizeSchema(value: any, ancestors: Set<any> = new Set(), depth = 0): any {
+  if (value === null || typeof value !== "object") return value;
+  if (ancestors.has(value) || depth > MAX_SCHEMA_DEPTH) {
+    // Cycle or runaway depth: bounded, still-valid stub (accepts any value).
+    return {};
+  }
+  ancestors.add(value);
+  let out: any;
+  if (Array.isArray(value)) {
+    out = value.map((v) => sanitizeSchema(v, ancestors, depth + 1));
+  } else {
+    out = {};
+    for (const [k, v] of Object.entries(value)) {
+      out[k] = sanitizeSchema(v, ancestors, depth + 1);
+    }
+  }
+  ancestors.delete(value);
+  return out;
+}
+
 /** Sanitize an operationId (or method+path fallback) into a valid MCP tool name. */
 function toolName(opId: string | undefined, method: string, path: string): string {
   const raw = opId && opId.trim().length > 0 ? opId : `${method}_${path}`;
@@ -53,13 +83,13 @@ function buildInputSchema(
   const required: string[] = [];
   for (const p of params) {
     if (!p || !p.name) continue;
-    const schema: Record<string, unknown> = p.schema ? { ...p.schema } : { type: "string" };
+    const schema: Record<string, unknown> = p.schema ? sanitizeSchema(p.schema) : { type: "string" };
     if (p.description && !schema.description) schema.description = p.description;
     properties[p.name] = schema;
     if (p.required) required.push(p.name);
   }
   if (bodySchema) {
-    const body: Record<string, unknown> = { ...bodySchema };
+    const body: Record<string, unknown> = sanitizeSchema(bodySchema);
     if (!body.description) body.description = "JSON request body.";
     properties.body = body;
     if (bodyRequired) required.push("body");
